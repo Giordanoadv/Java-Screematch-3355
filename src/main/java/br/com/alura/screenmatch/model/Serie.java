@@ -1,30 +1,68 @@
+
 package br.com.alura.screenmatch.model;
 
 import br.com.alura.screenmatch.service.traducao.ConsultaMyMemory;
-import com.fasterxml.jackson.annotation.JsonAlias;
+import jakarta.persistence.*;
 
-import java.util.OptionalDouble;
+import java.util.ArrayList;
+import java.util.List;
 
+@Entity
+@Table(name = "series")
 public class Serie {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true)
     private String titulo;
+
     private Integer totalTemporadas;
+
     private Double avaliacao;
-    private  Categoria genero;
+
+    @Enumerated(EnumType.STRING)
+    private Categoria genero;
+
+    @Column(columnDefinition = "TEXT")
     private String atores;
+
+    @Column(columnDefinition = "TEXT")
     private String poster;
-   private  String sinopse;
+
+    @Column(columnDefinition = "TEXT")
+    private String sinopse;
+
+    @Transient
+    private List<Episodio> episodios =  new ArrayList<Episodio>();
+
+    // Construtor necessário para o JPA
+    protected Serie() {
+    }
 
     public Serie(DadosSerie dadosSerie) {
         this.titulo = dadosSerie.titulo();
         this.totalTemporadas = dadosSerie.totalTemporadas();
-        this.avaliacao = OptionalDouble.of(Double.valueOf(dadosSerie.avaliacao())).orElse(0);
-        this.genero = Categoria.fromString(dadosSerie.genero().split(",")[0].trim());
+
+        String nota = dadosSerie.avaliacao();
+        this.avaliacao = (nota == null || nota.equalsIgnoreCase("N/A"))
+                ? 0.0
+                : Double.valueOf(nota);
+
+        this.genero = Categoria.fromString(
+                dadosSerie.genero().split(",")[0].trim()
+        );
+
         this.atores = dadosSerie.atores();
         this.poster = dadosSerie.poster();
-        this.sinopse = ConsultaMyMemory.obterTraducao(dadosSerie.sinopse()).trim();
+        this.sinopse = ConsultaMyMemory
+                .obterTraducao(dadosSerie.sinopse())
+                .trim();
+    }
 
-
-
+    public Long getId() {
+        return id;
     }
 
     public String getTitulo() {
@@ -85,14 +123,15 @@ public class Serie {
 
     @Override
     public String toString() {
-        return
-                "genero=" + genero +
-                        ",titulo='" + titulo + '\'' +
-                        ", totalTemporadas=" + totalTemporadas +
-                        ", avaliacao=" + avaliacao +
-                        ", atores='" + atores + '\'' +
-                        ", poster='" + poster + '\'' +
-                        ", sinopse='" + sinopse + '\'' +
-                        '}';
+        return "Serie{" +
+                "id=" + id +
+                ", titulo='" + titulo + '\'' +
+                ", totalTemporadas=" + totalTemporadas +
+                ", avaliacao=" + avaliacao +
+                ", genero=" + genero +
+                ", atores='" + atores + '\'' +
+                ", poster='" + poster + '\'' +
+                ", sinopse='" + sinopse + '\'' +
+                '}';
     }
 }
