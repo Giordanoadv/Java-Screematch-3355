@@ -134,4 +134,12 @@ public class Serie {
                 ", sinopse='" + sinopse + '\'' +
                 '}';
     }
+
+    public void setEpisodios(List<Episodio> episodios) {
+        this.episodios = episodios;
+    }
+
+    public List<Episodio> getEpisodios() {
+        return episodios;
+    }
 }
