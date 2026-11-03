@@ -34,7 +34,7 @@ public class Serie {
     @Column(columnDefinition = "TEXT")
     private String sinopse;
 
-    @OneToMany(mappedBy = "serie")
+    @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL)
     private List<Episodio> episodios =  new ArrayList<Episodio>();
 
     // Construtor necessário para o JPA
@@ -136,6 +136,7 @@ public class Serie {
     }
 
     public void setEpisodios(List<Episodio> episodios) {
+        episodios.forEach(episodio -> episodio.setSerie(this));
         this.episodios = episodios;
     }
 

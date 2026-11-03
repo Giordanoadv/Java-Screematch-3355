@@ -52,6 +52,13 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- Banco em memória usado somente nos testes de persistência -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 		<!-- Jackson para JSON -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
