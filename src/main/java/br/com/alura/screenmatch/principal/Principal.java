@@ -20,7 +20,7 @@ public class Principal {
     private ConsumoApi consumo = new ConsumoApi();
     private ConverteDados conversor = new ConverteDados();
     private final String ENDERECO = "https://www.omdbapi.com/?t=";
-    private final String API_KEY = "&apikey=6585022c";
+    private final String API_KEY = obterApiKey();
     private List<DadosSerie> dadosSeries = new ArrayList<>();
 
 
@@ -29,6 +29,15 @@ public class Principal {
     private SerieRepository repositorio;
     private List<Serie> series = new ArrayList<>();
 
+
+    private static String obterApiKey() {
+        var chave = System.getenv("OMDB_API_KEY");
+        if (chave == null || chave.isBlank()) {
+            throw new IllegalStateException(
+                    "Configure a variável de ambiente OMDB_API_KEY com sua chave da OMDb.");
+        }
+        return "&apikey=" + chave;
+    }
 
     public Principal(SerieRepository repositorio) {
         this.repositorio = repositorio;
@@ -74,7 +83,7 @@ public class Principal {
         series = repositorio.findAll();
         series.stream()
                 .sorted(Comparator.comparing(Serie::getGenero))
-                .forEach(series::add);
+                .forEach(System.out::println);
 
     }
 

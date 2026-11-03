@@ -22,6 +22,10 @@ public class Episodio {
     @ManyToOne
     private Serie serie;
 
+    // Construtor necessário para a JPA carregar os episódios do banco.
+    protected Episodio() {
+    }
+
     public Episodio(Integer numeroTemporada, DadosEpisodio dadosEpisodio) {
         this.temporada = numeroTemporada;
         this.titulo = dadosEpisodio.titulo();
