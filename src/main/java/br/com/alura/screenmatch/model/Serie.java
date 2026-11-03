@@ -34,7 +34,7 @@ public class Serie {
     @Column(columnDefinition = "TEXT")
     private String sinopse;
 
-    @Transient
+    @OneToMany(mappedBy = "serie")
     private List<Episodio> episodios =  new ArrayList<Episodio>();
 
     // Construtor necessário para o JPA
